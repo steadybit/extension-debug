@@ -1,0 +1,55 @@
+{{- if .Values.clusterRole.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.clusterRole.name }}
+  labels:
+  {{- range $key, $value := .Values.extraLabels }}
+    {{ $key }}: {{ $value }}
+  {{- end }}
+rules:
+  {{/* Required for Discoveries */}}
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - replicasets
+      - daemonsets
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - watch
+  {{/* Required for Discoveries */}}
+  - apiGroups: [""]
+    resources:
+      - services
+      - pods
+      - nodes
+      - events
+    verbs:
+      - get
+      - list
+      - watch
+  {{/* Required for Single-Replica-Advice */}}
+  - apiGroups:
+      - autoscaling
+    resources:
+      - horizontalpodautoscalers
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments/scale
+    verbs:
+      - get
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets/scale
+    verbs:
+      - get
+{{- end }}
