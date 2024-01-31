@@ -7,13 +7,17 @@ package extdebug
 import (
 	"context"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/action-kit/go/action_kit_api/v2"
 	"github.com/steadybit/action-kit/go/action_kit_sdk"
 	extension_kit "github.com/steadybit/extension-kit"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/extconversion"
+	"github.com/steadybit/extension-kit/extfile"
 	"github.com/steadybit/extension-kit/extutil"
+	"os"
+	"sync"
 )
 
 type debugAction struct{}
@@ -23,9 +27,18 @@ var (
 	_ action_kit_sdk.Action[DebugActionState]           = (*debugAction)(nil)
 	_ action_kit_sdk.ActionWithStatus[DebugActionState] = (*debugAction)(nil) // Optional, needed when the action needs a status method
 	_ action_kit_sdk.ActionWithStop[DebugActionState]   = (*debugAction)(nil) // Optional, needed when the action needs a stop method
+
+	debugRuns sync.Map
 )
 
+type DebugRun struct {
+	Finished  bool
+	ResultZip string
+}
+
 type DebugActionState struct {
+	WorkingDir  string
+	ExecutionId uuid.UUID
 }
 
 type DebugActionConfig struct {
@@ -43,19 +56,13 @@ func (l *debugAction) NewEmptyState() DebugActionState {
 func (l *debugAction) Describe() action_kit_api.ActionDescription {
 	return action_kit_api.ActionDescription{
 		Id:          fmt.Sprint(actionID),
-		Label:       "debug",
-		Description: "collects debug information",
+		Label:       "Debug Logs",
+		Description: "Collects debug information",
 		Version:     extbuild.GetSemverVersionStringOrUnknown(),
 		Icon:        extutil.Ptr(actionIcon),
-		// Category for the targets to appear in
 		Category: extutil.Ptr("other"),
 
-		// To clarify the purpose of the action, you can set a kind.
-		//   Attack: Will cause harm to targets
-		//   Check: Will perform checks on the targets
-		//   LoadTest: Will perform load tests on the targets
-		//   Other
-		Kind: action_kit_api.Other,
+		Kind: action_kit_api.Check,
 
 		// How the action is controlled over time.
 		//   External: The agent takes care and calls stop then the time has passed. Requires a duration parameter. Use this when the duration is known in advance.
@@ -65,56 +72,90 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 
 		// The parameters for the action
 		Parameters: []action_kit_api.ActionParameter{},
-		//Status: extutil.Ptr(action_kit_api.MutatingEndpointReferenceWithCallInterval{
-		//	CallInterval: extutil.Ptr("1s"),
-		//}),
+		Status: extutil.Ptr(action_kit_api.MutatingEndpointReferenceWithCallInterval{
+			CallInterval: extutil.Ptr("1s"),
+		}),
 		Stop: extutil.Ptr(action_kit_api.MutatingEndpointReference{}),
 	}
 }
 
-// Prepare is called before the action is started.
-// It can be used to validate the parameters and prepare the action.
-// It must not cause any harmful effects.
-// The passed in state is included in the subsequent calls to start/status/stop.
-// So the state should contain all information needed to execute the action and even more important: to be able to stop it.
 func (l *debugAction) Prepare(_ context.Context, state *DebugActionState, request action_kit_api.PrepareActionRequestBody) (*action_kit_api.PrepareResult, error) {
 	log.Info().Msg("Debug action **prepare**")
-	var config DebugActionConfig
-	if err := extconversion.Convert(request.Config, &config); err != nil {
+	var debugActionConfig DebugActionConfig
+	if err := extconversion.Convert(request.Config, &debugActionConfig); err != nil {
 		return nil, extension_kit.ToError("Failed to unmarshal the config.", err)
 	}
+	state.ExecutionId = request.ExecutionId
 
-	return &action_kit_api.PrepareResult{}, nil
+	temp, err := os.MkdirTemp(os.TempDir(), "debugging_"+state.ExecutionId.String())
+	if err != nil {
+		log.Err(err).Msg("Failed to create temp dir")
+		return nil, err
+	}
+	state.WorkingDir = temp
+	debugRuns.Store(state.ExecutionId, DebugRun{
+		Finished: false,
+	})
+
+	return nil, nil
 }
 
-// Start is called to start the action
-// You can mutate the state here.
-// You can use the result to return messages/errors/metrics or artifacts
 func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action_kit_api.StartResult, error) {
 	log.Info().Msg("Debug action **start**")
+
+	go func() {
+		resultZip := RunSteadybitDebug(state.WorkingDir)
+		debugRuns.Store(state.ExecutionId, DebugRun{
+			Finished:  true,
+			ResultZip: resultZip,
+		})
+	}()
 
 	return &action_kit_api.StartResult{}, nil
 }
 
-// Status is optional.
-// If you implement that it will be called periodically to check the status of the action.
-// You can use the result to signal that the action is done and to return messages/errors/metrics or artifacts
 func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*action_kit_api.StatusResult, error) {
 	log.Info().Msg("Debug action **status**")
 
+	value, ok := debugRuns.Load(state.ExecutionId)
+	if !ok {
+		return nil, fmt.Errorf("state not found for execution id %s", state.ExecutionId)
+	}
+	if ok {
+		debugRun := value.(DebugRun)
+		if debugRun.Finished {
+			artifacts := make([]action_kit_api.Artifact, 0)
+			_, err := os.Stat(debugRun.ResultZip)
+
+			if err == nil { // file exists
+				content, err := extfile.File2Base64(debugRun.ResultZip)
+				if err != nil {
+					return nil, extutil.Ptr(extension_kit.ToError("Failed to open content file", err))
+				}
+				artifacts = append(artifacts, action_kit_api.Artifact{
+					Label: "$(experimentKey)_$(executionId)_" + state.ExecutionId.String() + "_steadybit-debug.tar.gz",
+					Data:  content,
+				})
+			}
+			return &action_kit_api.StatusResult{
+				Completed: true,
+				Artifacts: extutil.Ptr(artifacts),
+			}, nil
+		}
+	}
 	return &action_kit_api.StatusResult{
 		//indicate that the action is still running
 		Completed: false,
-		//These messages will show up in agent log
 	}, nil
 }
 
-// Stop is called to stop the action
-// It will be called even if the start method did not complete successfully.
-// It should be implemented in a immutable way, as the agent might to retries if the stop method timeouts.
-// You can use the result to return messages/errors/metrics or artifacts
 func (l *debugAction) Stop(_ context.Context, state *DebugActionState) (*action_kit_api.StopResult, error) {
 	log.Info().Msg("Debug action **stop**")
 
-	return &action_kit_api.StopResult{}, nil
+	err := os.RemoveAll(state.WorkingDir)
+	if err != nil {
+		log.Err(err).Msg("Failed to remove temp dir")
+		return nil, err
+	}
+	return nil, nil
 }
