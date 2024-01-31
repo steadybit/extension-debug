@@ -101,7 +101,7 @@ func (l *debugAction) Prepare(_ context.Context, state *DebugActionState, reques
 }
 
 func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action_kit_api.StartResult, error) {
-	log.Debug().Msg("Debug action **start**")
+	log.Info().Msg("Debug action **start**")
 
 	go func() {
 		resultZip := RunSteadybitDebug(state.WorkingDir)
@@ -124,6 +124,7 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 	if ok {
 		debugRun := value.(DebugRun)
 		if debugRun.Finished {
+			log.Info().Msg("Debug action **finished**")
 			artifacts := make([]action_kit_api.Artifact, 0)
 			_, err := os.Stat(debugRun.ResultZip)
 
@@ -136,6 +137,7 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 					Label: "$(experimentKey)_$(executionId)_" + state.ExecutionId.String() + "_steadybit-debug.tar.gz",
 					Data:  content,
 				})
+				log.Info().Msg("Uploading debug result: " + debugRun.ResultZip)
 			}
 			return &action_kit_api.StatusResult{
 				Completed: true,
@@ -150,7 +152,7 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 }
 
 func (l *debugAction) Stop(_ context.Context, state *DebugActionState) (*action_kit_api.StopResult, error) {
-	log.Debug().Msg("Debug action **stop**")
+	log.Info().Msg("Debug action **stop**")
 
 	err := os.RemoveAll(state.WorkingDir)
 	if err != nil {
