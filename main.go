@@ -67,8 +67,8 @@ func main() {
 		// This is the default port under which your extension is accessible.
 		// The port can be configured externally through the
 		// STEADYBIT_EXTENSION_PORT environment variable.
-		// We suggest that you keep port 8080 as the default.
-		Port: 8080,
+		// We suggest that you keep port 8089 as the default.
+		Port: 8089,
 	})
 }
 

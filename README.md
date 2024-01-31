@@ -21,7 +21,7 @@ The extension supports all environment variables provided by [steadybit/extensio
 ```sh
 docker run \
   --rm \
-  -p 8080 \
+  -p 8089 \
   --name steadybit-extension-debug \
   ghcr.io/steadybit/extension-debug:latest
 ```
