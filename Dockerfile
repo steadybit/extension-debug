@@ -44,6 +44,9 @@ ARG USER_UID=10000
 
 RUN adduser -u $USER_UID -D $USERNAME
 
+RUN apk update && \
+    apk add curl
+
 USER $USERNAME
 
 WORKDIR /
