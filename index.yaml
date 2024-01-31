@@ -12,6 +12,35 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: 0.0.0
+    created: "2024-01-31T17:43:31.74619881Z"
+    dependencies:
+    - name: extensionlib
+      repository: https://steadybit.github.io/helm-charts
+      version: ^1.4.4
+    description: Steadybit debug extension Helm chart for Kubernetes.
+    digest: c73ea41c46d4d7ea921196e166bac8dfd3a200fb4db35910c65c322b266a31bf
+    home: https://www.steadybit.com/
+    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+    maintainers:
+    - email: ansgar.schulte@steadybit.com
+      name: ansgarschulte
+    name: steadybit-extension-debug
+    sources:
+    - https://github.com/steadybit/extension-debug
+    urls:
+    - https://github.com/steadybit/extension-debug/releases/download/steadybit-extension-debug-1.0.3/steadybit-extension-debug-1.0.3.tgz
+    version: 1.0.3
+  - annotations:
+      artifacthub.io/images: |
+        - name: logo
+          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+      artifacthub.io/links: |-
+        - name: Steadybit website
+          url: https://www.steadybit.com
+        - name: Steadybit reliability hub
+          url: https://hub.steadybit.com
+    apiVersion: v2
+    appVersion: 0.0.0
     created: "2024-01-31T17:01:48.721468069Z"
     dependencies:
     - name: extensionlib
@@ -88,4 +117,4 @@ entries:
     urls:
     - https://github.com/steadybit/extension-debug/releases/download/steadybit-extension-debug-1.0.0/steadybit-extension-debug-1.0.0.tgz
     version: 1.0.0
-generated: "2024-01-31T17:01:48.721484089Z"
+generated: "2024-01-31T17:43:31.746218597Z"
