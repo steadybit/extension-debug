@@ -65,9 +65,13 @@ manifest should match snapshot using podAnnotations and Labels:
                 runAsGroup: 10000
                 runAsNonRoot: true
                 runAsUser: 10000
-              volumeMounts: null
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
           serviceAccountName: steadybit-extension-debug
-          volumes: null
+          volumes:
+            - emptyDir: {}
+              name: tmp-dir
 manifest should match snapshot with TLS:
   1: |
     apiVersion: apps/v1
@@ -134,11 +138,15 @@ manifest should match snapshot with TLS:
                 runAsNonRoot: true
                 runAsUser: 10000
               volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
                 - mountPath: /etc/extension/certificates/server-cert
                   name: certificate-server-cert
                   readOnly: true
           serviceAccountName: steadybit-extension-debug
           volumes:
+            - emptyDir: {}
+              name: tmp-dir
             - name: certificate-server-cert
               secret:
                 optional: false
@@ -213,9 +221,13 @@ manifest should match snapshot with extra env vars:
                 runAsGroup: 10000
                 runAsNonRoot: true
                 runAsUser: 10000
-              volumeMounts: null
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
           serviceAccountName: steadybit-extension-debug
-          volumes: null
+          volumes:
+            - emptyDir: {}
+              name: tmp-dir
 manifest should match snapshot with extra labels:
   1: |
     apiVersion: apps/v1
@@ -283,9 +295,13 @@ manifest should match snapshot with extra labels:
                 runAsGroup: 10000
                 runAsNonRoot: true
                 runAsUser: 10000
-              volumeMounts: null
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
           serviceAccountName: steadybit-extension-debug
-          volumes: null
+          volumes:
+            - emptyDir: {}
+              name: tmp-dir
 manifest should match snapshot with mutual TLS:
   1: |
     apiVersion: apps/v1
@@ -352,6 +368,8 @@ manifest should match snapshot with mutual TLS:
                 runAsNonRoot: true
                 runAsUser: 10000
               volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
                 - mountPath: /etc/extension/certificates/client-cert-a
                   name: certificate-client-cert-a
                   readOnly: true
@@ -360,6 +378,8 @@ manifest should match snapshot with mutual TLS:
                   readOnly: true
           serviceAccountName: steadybit-extension-debug
           volumes:
+            - emptyDir: {}
+              name: tmp-dir
             - name: certificate-client-cert-a
               secret:
                 optional: false
@@ -433,9 +453,13 @@ manifest should match snapshot with mutual TLS using containerPaths:
                 runAsGroup: 10000
                 runAsNonRoot: true
                 runAsUser: 10000
-              volumeMounts: null
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
           serviceAccountName: steadybit-extension-debug
-          volumes: null
+          volumes:
+            - emptyDir: {}
+              name: tmp-dir
 manifest should match snapshot with podSecurityContext:
   1: |
     apiVersion: apps/v1
@@ -501,11 +525,15 @@ manifest should match snapshot with podSecurityContext:
                 runAsGroup: 10000
                 runAsNonRoot: true
                 runAsUser: 10000
-              volumeMounts: null
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
           securityContext:
             runAsUser: 2222
           serviceAccountName: steadybit-extension-debug
-          volumes: null
+          volumes:
+            - emptyDir: {}
+              name: tmp-dir
 manifest should match snapshot with priority class:
   1: |
     apiVersion: apps/v1
@@ -571,10 +599,14 @@ manifest should match snapshot with priority class:
                 runAsGroup: 10000
                 runAsNonRoot: true
                 runAsUser: 10000
-              volumeMounts: null
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
           priorityClassName: my-priority-class
           serviceAccountName: steadybit-extension-debug
-          volumes: null
+          volumes:
+            - emptyDir: {}
+              name: tmp-dir
 manifest should match snapshot without TLS:
   1: |
     apiVersion: apps/v1
@@ -640,6 +672,10 @@ manifest should match snapshot without TLS:
                 runAsGroup: 10000
                 runAsNonRoot: true
                 runAsUser: 10000
-              volumeMounts: null
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp-dir
           serviceAccountName: steadybit-extension-debug
-          volumes: null
+          volumes:
+            - emptyDir: {}
+              name: tmp-dir

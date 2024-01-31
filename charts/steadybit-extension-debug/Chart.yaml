@@ -1,7 +1,7 @@
 apiVersion: v2
 name: steadybit-extension-debug
 description: Steadybit debug extension Helm chart for Kubernetes.
-version: 1.0.0 # replace with your version
+version: 1.0.1
 appVersion: 0.0.0 # replace with your version
 home: https://www.steadybit.com/
 icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png

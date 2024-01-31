@@ -80,14 +80,14 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 }
 
 func (l *debugAction) Prepare(_ context.Context, state *DebugActionState, request action_kit_api.PrepareActionRequestBody) (*action_kit_api.PrepareResult, error) {
-	log.Info().Msg("Debug action **prepare**")
+	log.Debug().Msg("Debug action **prepare**")
 	var debugActionConfig DebugActionConfig
 	if err := extconversion.Convert(request.Config, &debugActionConfig); err != nil {
 		return nil, extension_kit.ToError("Failed to unmarshal the config.", err)
 	}
 	state.ExecutionId = request.ExecutionId
 
-	temp, err := os.MkdirTemp(os.TempDir(), "debugging_"+state.ExecutionId.String())
+	temp, err := os.MkdirTemp("/tmp", "debugging_"+state.ExecutionId.String())
 	if err != nil {
 		log.Err(err).Msg("Failed to create temp dir")
 		return nil, err
@@ -101,7 +101,7 @@ func (l *debugAction) Prepare(_ context.Context, state *DebugActionState, reques
 }
 
 func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action_kit_api.StartResult, error) {
-	log.Info().Msg("Debug action **start**")
+	log.Debug().Msg("Debug action **start**")
 
 	go func() {
 		resultZip := RunSteadybitDebug(state.WorkingDir)
@@ -115,7 +115,7 @@ func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action
 }
 
 func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*action_kit_api.StatusResult, error) {
-	log.Info().Msg("Debug action **status**")
+	log.Debug().Msg("Debug action **status**")
 
 	value, ok := debugRuns.Load(state.ExecutionId)
 	if !ok {
@@ -150,7 +150,7 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 }
 
 func (l *debugAction) Stop(_ context.Context, state *DebugActionState) (*action_kit_api.StopResult, error) {
-	log.Info().Msg("Debug action **stop**")
+	log.Debug().Msg("Debug action **stop**")
 
 	err := os.RemoveAll(state.WorkingDir)
 	if err != nil {
