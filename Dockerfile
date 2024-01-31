@@ -19,6 +19,8 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
+RUN wget -P /usr/bin "https://storage.googleapis.com/kubernetes-release/release/$(wget -O - https://dl.k8s.io/release/stable.txt)/bin/linux/${TARGETARCH}/kubectl" && chmod a+x /usr/bin/kubectl
+
 COPY . .
 
 RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build \
@@ -47,6 +49,7 @@ USER $USERNAME
 WORKDIR /
 
 COPY --from=build /app/extension /extension
+COPY --from=build /usr/bin/kubectl /usr/bin/kubectl
 COPY --from=build /app/licenses /licenses
 
 EXPOSE 8089
