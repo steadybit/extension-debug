@@ -42,7 +42,7 @@ func (l *debugAction) NewEmptyState() DebugActionState {
 // Describe returns the action description for the platform with all required information.
 func (l *debugAction) Describe() action_kit_api.ActionDescription {
 	return action_kit_api.ActionDescription{
-		Id:          fmt.Sprintf(actionID),
+		Id:          fmt.Sprint(actionID),
 		Label:       "debug",
 		Description: "collects debug information",
 		Version:     extbuild.GetSemverVersionStringOrUnknown(),
