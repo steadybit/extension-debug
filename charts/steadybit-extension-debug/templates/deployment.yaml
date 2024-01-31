@@ -89,6 +89,7 @@ spec:
           emptyDir: {}
         {{- include "extensionlib.deployment.volumes" (list .) | nindent 8 }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
+      automountServiceAccountToken: true
       {{- with .Values.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}

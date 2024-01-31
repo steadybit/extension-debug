@@ -26,6 +26,7 @@ manifest should match snapshot using podAnnotations and Labels:
             steadybit.com/discovery-disabled: "true"
             steadybit.com/extension: "true"
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               image: ghcr.io/steadybit/extension-debug:v0.0.0
@@ -98,6 +99,7 @@ manifest should match snapshot with TLS:
             steadybit.com/discovery-disabled: "true"
             steadybit.com/extension: "true"
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               image: ghcr.io/steadybit/extension-debug:v0.0.0
@@ -177,6 +179,7 @@ manifest should match snapshot with extra env vars:
             steadybit.com/discovery-disabled: "true"
             steadybit.com/extension: "true"
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               envFrom:
@@ -256,6 +259,7 @@ manifest should match snapshot with extra labels:
             steadybit.com/extension: "true"
             tags.datadoghq.com/service: steadybit-extension
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               image: ghcr.io/steadybit/extension-debug:v0.0.0
@@ -328,6 +332,7 @@ manifest should match snapshot with mutual TLS:
             steadybit.com/discovery-disabled: "true"
             steadybit.com/extension: "true"
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               image: ghcr.io/steadybit/extension-debug:v0.0.0
@@ -414,6 +419,7 @@ manifest should match snapshot with mutual TLS using containerPaths:
             steadybit.com/discovery-disabled: "true"
             steadybit.com/extension: "true"
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               image: ghcr.io/steadybit/extension-debug:v0.0.0
@@ -486,6 +492,7 @@ manifest should match snapshot with podSecurityContext:
             steadybit.com/discovery-disabled: "true"
             steadybit.com/extension: "true"
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               image: ghcr.io/steadybit/extension-debug:v0.0.0
@@ -560,6 +567,7 @@ manifest should match snapshot with priority class:
             steadybit.com/discovery-disabled: "true"
             steadybit.com/extension: "true"
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               image: ghcr.io/steadybit/extension-debug:v0.0.0
@@ -633,6 +641,7 @@ manifest should match snapshot without TLS:
             steadybit.com/discovery-disabled: "true"
             steadybit.com/extension: "true"
         spec:
+          automountServiceAccountToken: true
           containers:
             - env: null
               image: ghcr.io/steadybit/extension-debug:v0.0.0
