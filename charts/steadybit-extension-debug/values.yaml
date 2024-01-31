@@ -70,6 +70,19 @@ serviceAccount:
   # serviceAccount.name -- The name of the ServiceAccount to use.
   name: steadybit-extension-debug
 
+
+clusterRole:
+  # clusterRole.create -- Specifies whether a ClusterRole should be created.
+  create: true
+  # clusterRole.name -- The name of the ClusterRole to use.
+  name: steadybit-extension-debug
+
+clusterRoleBinding:
+  # clusterRoleBinding.create -- Specifies whether a ClusterRoleBinding should be created.
+  create: true
+  # clusterRoleBinding.name -- The name of the ClusterRoleBinding to use.
+  name: steadybit-extension-debug
+
 # extra labels to apply to the Kubernetes resources
 extraLabels: {}
 

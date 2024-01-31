@@ -16,7 +16,6 @@ func TestWithMinikube(t *testing.T) {
 		ExtraArgs: func(m *e2e.Minikube) []string {
 			return []string{
 				"--set", "logging.level=debug",
-				"--set", "discovery.attributes.excludes.robot={robot.tags.*}",
 			}
 		},
 	}
