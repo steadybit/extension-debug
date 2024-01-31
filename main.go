@@ -9,16 +9,14 @@ import (
 	"github.com/steadybit/action-kit/go/action_kit_api/v2"
 	"github.com/steadybit/action-kit/go/action_kit_sdk"
 	"github.com/steadybit/discovery-kit/go/discovery_kit_api"
-	"github.com/steadybit/discovery-kit/go/discovery_kit_sdk"
 	"github.com/steadybit/event-kit/go/event_kit_api"
+	"github.com/steadybit/extension-debug/config"
+	"github.com/steadybit/extension-debug/extdebug"
 	"github.com/steadybit/extension-kit/extbuild"
 	"github.com/steadybit/extension-kit/exthealth"
 	"github.com/steadybit/extension-kit/exthttp"
 	"github.com/steadybit/extension-kit/extlogging"
 	"github.com/steadybit/extension-kit/extruntime"
-	"github.com/steadybit/extension-scaffold/config"
-	"github.com/steadybit/extension-scaffold/extevents"
-	"github.com/steadybit/extension-scaffold/extrobots"
 	_ "net/http/pprof" //allow pprof
 )
 
@@ -54,9 +52,7 @@ func main() {
 	// This is a section you will most likely want to change: The registration of HTTP handlers
 	// for your extension. You might want to change these because the names do not fit, or because
 	// you do not have a need for all of them.
-	discovery_kit_sdk.Register(extrobots.NewRobotDiscovery())
-	action_kit_sdk.RegisterAction(extrobots.NewLogAction())
-	extevents.RegisterEventListenerHandlers()
+	action_kit_sdk.RegisterAction(extdebug.NewDebugAction())
 
 	//This will install a signal handlder, that will stop active actions when receiving a SIGURS1, SIGTERM or SIGINT
 	action_kit_sdk.InstallSignalHandler()
@@ -90,12 +86,5 @@ func getExtensionList() ExtensionListResponse {
 		// https://github.com/steadybit/action-kit/blob/main/docs/action-api.md#action-list
 		ActionList: action_kit_sdk.GetActionList(),
 
-		// See this document to learn more about the discovery list:
-		// https://github.com/steadybit/discovery-kit/blob/main/docs/discovery-api.md#index-response
-		DiscoveryList: discovery_kit_sdk.GetDiscoveryList(),
-
-		// See this document to learn more about the event listener list:
-		// https://github.com/steadybit/event-kit/blob/main/docs/event-api.md#event-listeners-list
-		EventListenerList: extevents.GetEventListenerList(),
 	}
 }

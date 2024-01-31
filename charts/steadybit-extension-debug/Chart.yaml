@@ -1,15 +1,15 @@
 apiVersion: v2
-name: steadybit-extension-scaffold
-description: Steadybit scaffold extension Helm chart for Kubernetes.
-version: 1.0.27 # replace with your version
+name: steadybit-extension-debug
+description: Steadybit debug extension Helm chart for Kubernetes.
+version: 1.0.0 # replace with your version
 appVersion: 0.0.0 # replace with your version
 home: https://www.steadybit.com/
 icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
 maintainers:
-  - email: daniel.reuter@steadybit.com
-    name: reuda
+  - email: ansgar.schulte@steadybit.com
+    name: ansgarschulte
 sources:
-  - https://github.com/steadybit/extension-scaffold
+  - https://github.com/steadybit/extension-debug
 annotations:
   artifacthub.io/images: |
     - name: logo
