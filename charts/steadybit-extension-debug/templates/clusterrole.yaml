@@ -41,6 +41,11 @@ rules:
       - list
       - watch
       - patch
+  - apiGroups: [""]
+    resources:
+      - pods/attach
+    verbs:
+      - create
   {{/* Required for Single-Replica-Advice */}}
   - apiGroups:
       - autoscaling
