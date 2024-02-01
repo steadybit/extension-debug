@@ -12,7 +12,7 @@ require (
 	github.com/steadybit/discovery-kit/go/discovery_kit_api v1.5.0
 	github.com/steadybit/event-kit/go/event_kit_api v1.3.1
 	github.com/steadybit/extension-kit v1.8.11
-	github.com/steadybit/steadybit-debug v1.2.5-0.20240131141112-30c830e52994
+	github.com/steadybit/steadybit-debug v1.2.5-0.20240201075001-d3ebd5e5db6f
 	github.com/stretchr/testify v1.8.4
 )
 
