@@ -53,7 +53,7 @@ manifest should match snapshot using podAnnotations and Labels:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi
@@ -126,7 +126,7 @@ manifest should match snapshot with TLS:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi
@@ -211,7 +211,7 @@ manifest should match snapshot with extra env vars:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi
@@ -286,7 +286,7 @@ manifest should match snapshot with extra labels:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi
@@ -359,7 +359,7 @@ manifest should match snapshot with mutual TLS:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi
@@ -446,7 +446,7 @@ manifest should match snapshot with mutual TLS using containerPaths:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi
@@ -519,7 +519,7 @@ manifest should match snapshot with podSecurityContext:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi
@@ -594,7 +594,7 @@ manifest should match snapshot with priority class:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi
@@ -668,7 +668,7 @@ manifest should match snapshot without TLS:
               resources:
                 limits:
                   cpu: 200m
-                  memory: 128Mi
+                  memory: 256Mi
                 requests:
                   cpu: 50m
                   memory: 32Mi

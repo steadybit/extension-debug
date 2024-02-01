@@ -40,6 +40,12 @@ manifest should match snapshot:
           - watch
           - patch
       - apiGroups:
+          - ""
+        resources:
+          - pods/attach
+        verbs:
+          - create
+      - apiGroups:
           - autoscaling
         resources:
           - horizontalpodautoscalers
