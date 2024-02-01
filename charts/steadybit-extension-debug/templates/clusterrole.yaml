@@ -27,10 +27,20 @@ rules:
       - pods
       - nodes
       - events
+      - pods/log
+      - namespaces
     verbs:
       - get
       - list
       - watch
+  - apiGroups: [""]
+    resources:
+      - pods/ephemeralcontainers
+    verbs:
+      - get
+      - list
+      - watch
+      - patch
   {{/* Required for Single-Replica-Advice */}}
   - apiGroups:
       - autoscaling
@@ -52,4 +62,12 @@ rules:
       - statefulsets/scale
     verbs:
       - get
+  - apiGroups:
+      - metrics.k8s.io
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
 {{- end }}
