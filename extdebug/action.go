@@ -61,7 +61,17 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 		Version:     extbuild.GetSemverVersionStringOrUnknown(),
 		Icon:        extutil.Ptr(actionIcon),
 		Category: extutil.Ptr("other"),
-
+		TargetSelection: extutil.Ptr(action_kit_api.TargetSelection{
+			TargetType:          clusterTargetType,
+			QuantityRestriction: extutil.Ptr(action_kit_api.All),
+			SelectionTemplates: extutil.Ptr([]action_kit_api.TargetSelectionTemplate{
+				{
+					Label:       "default",
+					Description: extutil.Ptr("Find service by cluster"),
+					Query:       "k8s.cluster-name=\"\"",
+				},
+			}),
+		}),
 		Kind: action_kit_api.Check,
 
 		// How the action is controlled over time.
