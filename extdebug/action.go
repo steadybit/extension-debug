@@ -60,7 +60,7 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 		Description: "Collects debug information",
 		Version:     extbuild.GetSemverVersionStringOrUnknown(),
 		Icon:        extutil.Ptr(actionIcon),
-		Category: extutil.Ptr("other"),
+		Category: extutil.Ptr("Debug"),
 		TargetSelection: extutil.Ptr(action_kit_api.TargetSelection{
 			TargetType:          clusterTargetType,
 			QuantityRestriction: extutil.Ptr(action_kit_api.All),
@@ -72,7 +72,7 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 				},
 			}),
 		}),
-		Kind: action_kit_api.Check,
+		Kind: action_kit_api.Other,
 
 		// How the action is controlled over time.
 		//   External: The agent takes care and calls stop then the time has passed. Requires a duration parameter. Use this when the duration is known in advance.
