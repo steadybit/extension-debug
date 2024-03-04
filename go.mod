@@ -2,8 +2,6 @@ module github.com/steadybit/extension-debug
 
 go 1.21.0
 
-toolchain go1.22.0
-
 require (
 	github.com/KimMachineGun/automemlimit v0.5.0
 	github.com/google/uuid v1.6.0
