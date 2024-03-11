@@ -12,7 +12,7 @@ require (
 	github.com/steadybit/action-kit/go/action_kit_test v1.2.9
 	github.com/steadybit/discovery-kit/go/discovery_kit_api v1.5.2
 	github.com/steadybit/event-kit/go/event_kit_api v1.3.1
-	github.com/steadybit/extension-kit v1.8.11
+	github.com/steadybit/extension-kit v1.8.12
 	github.com/steadybit/steadybit-debug v1.3.0
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/automaxprocs v1.5.3
