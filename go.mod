@@ -13,7 +13,7 @@ require (
 	github.com/steadybit/discovery-kit/go/discovery_kit_api v1.5.2
 	github.com/steadybit/event-kit/go/event_kit_api v1.3.1
 	github.com/steadybit/extension-kit v1.8.14
-	github.com/steadybit/steadybit-debug v1.3.0
+	github.com/steadybit/steadybit-debug v1.3.1
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/automaxprocs v1.5.3
 )
@@ -41,7 +41,7 @@ require (
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
-	github.com/invopop/yaml v0.2.0 // indirect
+	github.com/invopop/yaml v0.3.1 // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
