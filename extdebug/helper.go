@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func RunSteadybitDebug(workingDir string) string{
+func RunSteadybitDebug(workingDir string) string {
 	cfg := config.GetConfig()
 
 	cfg.OutputPath = workingDir
