@@ -15,7 +15,7 @@ require (
 	github.com/steadybit/discovery-kit/go/discovery_kit_api v1.5.2
 	github.com/steadybit/event-kit/go/event_kit_api v1.3.1
 	github.com/steadybit/extension-kit v1.8.14
-	github.com/steadybit/steadybit-debug v1.3.1
+	github.com/steadybit/steadybit-debug v1.3.2
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/automaxprocs v1.5.3
 )
