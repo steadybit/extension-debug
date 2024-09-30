@@ -60,7 +60,7 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 		Description: "Collects debug information",
 		Version:     extbuild.GetSemverVersionStringOrUnknown(),
 		Icon:        extutil.Ptr(actionIcon),
-		Category:    extutil.Ptr("Debug"),
+		Technology:  extutil.Ptr("Debug"),
 		TargetSelection: extutil.Ptr(action_kit_api.TargetSelection{
 			TargetType:          clusterTargetType,
 			QuantityRestriction: extutil.Ptr(action_kit_api.All),
