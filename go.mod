@@ -14,7 +14,7 @@ require (
 	github.com/steadybit/action-kit/go/action_kit_test v1.2.15
 	github.com/steadybit/discovery-kit/go/discovery_kit_api v1.6.0
 	github.com/steadybit/event-kit/go/event_kit_api v1.4.1
-	github.com/steadybit/extension-kit v1.8.15
+	github.com/steadybit/extension-kit v1.8.18
 	github.com/steadybit/steadybit-debug v1.3.2
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/automaxprocs v1.6.0
@@ -27,7 +27,7 @@ require (
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/docker/go-units v0.5.0 // indirect
-	github.com/elastic/go-sysinfo v1.14.1 // indirect
+	github.com/elastic/go-sysinfo v1.14.2 // indirect
 	github.com/elastic/go-windows v1.0.2 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
