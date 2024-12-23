@@ -66,7 +66,7 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 			QuantityRestriction: extutil.Ptr(action_kit_api.All),
 			SelectionTemplates: extutil.Ptr([]action_kit_api.TargetSelectionTemplate{
 				{
-					Label:       "default",
+					Label:       "cluster name",
 					Description: extutil.Ptr("Find service by cluster"),
 					Query:       "k8s.cluster-name=\"\"",
 				},
