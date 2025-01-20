@@ -142,8 +142,8 @@ github.com/steadybit/event-kit/go/event_kit_api v1.5.0 h1:iq2zzGrvMxJoLxwbIA7jxU
 github.com/steadybit/event-kit/go/event_kit_api v1.5.0/go.mod h1:SilUGxfSKOu0hTJcLDrjdjo2Pm0ZLIMUrugCK9nSQ6o=
 github.com/steadybit/extension-kit v1.8.23 h1:YyHCP1cfETOmOX8Bn21n+E910IhbjQZIWoV4Eu9Ks28=
 github.com/steadybit/extension-kit v1.8.23/go.mod h1:qUiOw0OJUkyuz9hkLkGfksc09JRkSyrKEiiIiuVc3+o=
-github.com/steadybit/steadybit-debug v1.3.2 h1:INlBCTcze9jN2P0BfvWnX5Z5TwBZmvwoNAhZ/fIql4s=
-github.com/steadybit/steadybit-debug v1.3.2/go.mod h1:g5LGs1JGUCx7IAKzn8gO1Ddz+AIlJeUv+5er7KTVjow=
+github.com/steadybit/steadybit-debug v1.3.3 h1:vbnIsX1PilfLeuotnpOK3y3D4AXuPyS4OrioBCEVYiY=
+github.com/steadybit/steadybit-debug v1.3.3/go.mod h1:g5LGs1JGUCx7IAKzn8gO1Ddz+AIlJeUv+5er7KTVjow=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
