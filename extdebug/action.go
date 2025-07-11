@@ -63,7 +63,7 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 		Technology:  extutil.Ptr("Debug"),
 		TargetSelection: extutil.Ptr(action_kit_api.TargetSelection{
 			TargetType:          clusterTargetType,
-			QuantityRestriction: extutil.Ptr(action_kit_api.All),
+			QuantityRestriction: extutil.Ptr(action_kit_api.QuantityRestrictionAll),
 			SelectionTemplates: extutil.Ptr([]action_kit_api.TargetSelectionTemplate{
 				{
 					Label:       "cluster name",
