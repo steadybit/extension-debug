@@ -16,7 +16,7 @@ require (
 	github.com/steadybit/event-kit/go/event_kit_api v1.6.0
 	github.com/steadybit/extension-kit v1.10.0
 	github.com/steadybit/steadybit-debug v1.3.3
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	go.uber.org/automaxprocs v1.6.0
 )
 
