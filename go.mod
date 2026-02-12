@@ -15,7 +15,6 @@ require (
 	github.com/steadybit/extension-kit v1.10.1
 	github.com/steadybit/steadybit-debug v1.3.3
 	github.com/stretchr/testify v1.11.1
-	go.uber.org/automaxprocs v1.6.0
 )
 
 require (
