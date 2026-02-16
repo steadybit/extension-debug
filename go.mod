@@ -12,7 +12,7 @@ require (
 	github.com/steadybit/action-kit/go/action_kit_test v1.4.5
 	github.com/steadybit/discovery-kit/go/discovery_kit_api v1.7.1
 	github.com/steadybit/event-kit/go/event_kit_api v1.6.2
-	github.com/steadybit/extension-kit v1.10.1
+	github.com/steadybit/extension-kit v1.10.2
 	github.com/steadybit/steadybit-debug v1.3.3
 	github.com/stretchr/testify v1.11.1
 )
@@ -46,6 +46,7 @@ require (
 	github.com/jessevdk/go-flags v1.6.1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/klauspost/compress v1.18.4 // indirect
 	github.com/mailru/easyjson v0.9.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
