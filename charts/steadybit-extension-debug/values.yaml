@@ -129,4 +129,3 @@ extraEnv: []
 #  - secretRef:
 #    name: env-secrets
 extraEnvFrom: []
-
