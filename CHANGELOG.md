@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.15
+
+- Update alpine packages in Docker image to address CVEs
+
 ## v1.0.14
 
 - Update dependencies
