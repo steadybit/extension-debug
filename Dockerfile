@@ -55,8 +55,7 @@ ARG USER_UID=10000
 
 RUN adduser -u $USER_UID -D $USERNAME
 
-RUN apk update && \
-    apk add curl
+RUN apk update && apk upgrade --no-cache && apk add curl && rm -rf /var/cache/apk/*
 
 USER $USERNAME
 
