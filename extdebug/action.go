@@ -59,15 +59,15 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 		Label:       "Debug Logs",
 		Description: "Collects debug information",
 		Version:     extbuild.GetSemverVersionStringOrUnknown(),
-		Icon:        extutil.Ptr(actionIcon),
-		Technology:  extutil.Ptr("Debug"),
-		TargetSelection: extutil.Ptr(action_kit_api.TargetSelection{
+		Icon:        new(actionIcon),
+		Technology:  new("Debug"),
+		TargetSelection: new(action_kit_api.TargetSelection{
 			TargetType:          clusterTargetType,
 			QuantityRestriction: extutil.Ptr(action_kit_api.QuantityRestrictionAll),
-			SelectionTemplates: extutil.Ptr([]action_kit_api.TargetSelectionTemplate{
+			SelectionTemplates: new([]action_kit_api.TargetSelectionTemplate{
 				{
 					Label:       "cluster name",
-					Description: extutil.Ptr("Find service by cluster"),
+					Description: new("Find service by cluster"),
 					Query:       "k8s.cluster-name=\"\"",
 				},
 			}),
@@ -82,10 +82,10 @@ func (l *debugAction) Describe() action_kit_api.ActionDescription {
 
 		// The parameters for the action
 		Parameters: []action_kit_api.ActionParameter{},
-		Status: extutil.Ptr(action_kit_api.MutatingEndpointReferenceWithCallInterval{
-			CallInterval: extutil.Ptr("1s"),
+		Status: new(action_kit_api.MutatingEndpointReferenceWithCallInterval{
+			CallInterval: new("1s"),
 		}),
-		Stop: extutil.Ptr(action_kit_api.MutatingEndpointReference{}),
+		Stop: new(action_kit_api.MutatingEndpointReference{}),
 	}
 }
 
@@ -141,7 +141,7 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 			if err == nil { // file exists
 				content, err := extfile.File2Base64(debugRun.ResultZip)
 				if err != nil {
-					return nil, extutil.Ptr(extension_kit.ToError("Failed to open content file", err))
+					return nil, new(extension_kit.ToError("Failed to open content file", err))
 				}
 				artifacts = append(artifacts, action_kit_api.Artifact{
 					Label: "$(experimentKey)_$(executionId)_" + state.ExecutionId.String() + "_steadybit-debug.tar.gz",
@@ -151,7 +151,7 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 			}
 			return &action_kit_api.StatusResult{
 				Completed: true,
-				Artifacts: extutil.Ptr(artifacts),
+				Artifacts: new(artifacts),
 			}, nil
 		}
 	}
