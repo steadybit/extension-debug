@@ -2,5 +2,13 @@ vulnerabilities:
   - id: CVE-2026-25679
     paths:
       - usr/bin/kubectl
-    statement: Wait for a new kubectl-Release
+    statement: Wait for kubectl release with fix
     expired_at: 2026-06-01
+  - id: CVE-2026-32280
+    statement: Wait for kubectl release with fix
+    paths:
+      - /usr/bin/kubectl
+  - id: CVE-2026-32282
+    statement: Wait for kubectl release with fix
+    paths:
+      - /usr/bin/kubectl
