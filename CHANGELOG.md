@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.20
+
+- Support discovery group attribute via `STEADYBIT_EXTENSION_DISCOVERY_GROUP` env var (or `discovery.group` Helm value) — when set, the extension adds `steadybit.group=<value>` to every discovered target
+- chart: use shared `extensionlib.deployment.env` helper so standard env vars (logging, TLS, discovery group) flow through consistently
+- Update dependencies
+
 ## v1.0.19
 
 - Bump Go to 1.26.3
