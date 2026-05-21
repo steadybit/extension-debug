@@ -28,7 +28,11 @@ manifest should match snapshot using podAnnotations and Labels:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -101,7 +105,15 @@ manifest should match snapshot with TLS:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
+                - name: STEADYBIT_EXTENSION_TLS_SERVER_CERT
+                  value: /etc/extension/certificates/server-cert/tls.crt
+                - name: STEADYBIT_EXTENSION_TLS_SERVER_KEY
+                  value: /etc/extension/certificates/server-cert/tls.key
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -181,7 +193,11 @@ manifest should match snapshot with custom image registry:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: my-registry.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -254,7 +270,11 @@ manifest should match snapshot with extra env vars:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               envFrom:
                 - configMapRef: null
                   name: env-configmap
@@ -334,7 +354,11 @@ manifest should match snapshot with extra labels:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -407,7 +431,11 @@ manifest should match snapshot with global image pull secrets:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -482,7 +510,11 @@ manifest should match snapshot with global image registry:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: corp-registry.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -555,7 +587,11 @@ manifest should match snapshot with global priority class:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -629,7 +665,11 @@ manifest should match snapshot with image pull secrets:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -704,7 +744,11 @@ manifest should match snapshot with legacy image name containing registry:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -777,7 +821,17 @@ manifest should match snapshot with mutual TLS:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
+                - name: STEADYBIT_EXTENSION_TLS_SERVER_CERT
+                  value: /etc/extension/certificates/server-cert/tls.crt
+                - name: STEADYBIT_EXTENSION_TLS_SERVER_KEY
+                  value: /etc/extension/certificates/server-cert/tls.key
+                - name: STEADYBIT_EXTENSION_TLS_CLIENT_CAS
+                  value: /etc/extension/certificates/client-cert-a/tls.crt,/etc/extension/certificates/client-cert-a/tls.crt
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -864,7 +918,17 @@ manifest should match snapshot with mutual TLS using containerPaths:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
+                - name: STEADYBIT_EXTENSION_TLS_SERVER_CERT
+                  value: /etc/tls/server.crt
+                - name: STEADYBIT_EXTENSION_TLS_SERVER_KEY
+                  value: /etc/tls/server.key
+                - name: STEADYBIT_EXTENSION_TLS_CLIENT_CAS
+                  value: /etc/tls/ca.crt,/etc/tls/ca2.crt
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -937,7 +1001,11 @@ manifest should match snapshot with podSecurityContext:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1012,7 +1080,11 @@ manifest should match snapshot with priority class:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -1086,7 +1158,11 @@ manifest should match snapshot without TLS:
         spec:
           automountServiceAccountToken: true
           containers:
-            - env: null
+            - env:
+                - name: STEADYBIT_LOG_LEVEL
+                  value: INFO
+                - name: STEADYBIT_LOG_FORMAT
+                  value: text
               image: ghcr.io/steadybit/extension-debug:v0.0.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
