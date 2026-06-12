@@ -2,7 +2,6 @@
 
 ## v1.0.21
 
-- chore: add ignore to .trivyignore.yml
 - chore: update dependencies
 - chore: update to go 1.26.4
 - feat: add weekly auto patch-release workflow
