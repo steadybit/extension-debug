@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.22
+
+- build(deps): bump alpine from 3.23 to 3.24
+
 ## v1.0.21
 
 - chore: update dependencies
