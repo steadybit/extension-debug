@@ -114,6 +114,15 @@ func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action
 	log.Info().Msg("Debug action **start**")
 
 	go func() {
+		// Recover so a panic while gathering debug information cannot crash the whole
+		// extension process (and take down other in-flight actions). Mark the run finished
+		// so Status completes instead of polling forever.
+		defer func() {
+			if r := recover(); r != nil {
+				log.Error().Msgf("Recovered from panic while gathering debug information: %v", r)
+				debugRuns.Store(state.ExecutionId, DebugRun{Finished: true})
+			}
+		}()
 		resultZip := RunSteadybitDebug(state.WorkingDir)
 		debugRuns.Store(state.ExecutionId, DebugRun{
 			Finished:  true,
@@ -163,6 +172,8 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 
 func (l *debugAction) Stop(_ context.Context, state *DebugActionState) (*action_kit_api.StopResult, error) {
 	log.Info().Msg("Debug action **stop**")
+
+	debugRuns.Delete(state.ExecutionId)
 
 	err := os.RemoveAll(state.WorkingDir)
 	if err != nil {

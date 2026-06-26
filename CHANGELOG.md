@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- fix: recover from panics in the background debug-gathering goroutine so a failure can no longer crash the whole extension, and remove the per-execution run state on stop to avoid an unbounded memory leak
+
 ## v1.0.23
 
 - build(deps): bump github.com/steadybit/extension-kit
