@@ -3,6 +3,7 @@
 ## Unreleased
 
 - fix: recover from panics in the background debug-gathering goroutine so a failure can no longer crash the whole extension, and remove the per-execution run state on stop to avoid an unbounded memory leak
+- fix: stop removing the debug working directory while it is still being gathered/archived, which could make steadybit-debug call `os.Exit(1)` and crash the whole extension when an experiment is stopped mid-run
 
 ## v1.0.23
 
