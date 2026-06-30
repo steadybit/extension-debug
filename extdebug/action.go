@@ -29,6 +29,9 @@ var (
 	_ action_kit_sdk.ActionWithStop[DebugActionState]   = (*debugAction)(nil) // Optional, needed when the action needs a stop method
 
 	debugRuns sync.Map
+	// debugCancels holds the cancel func for each running gather goroutine, keyed by
+	// execution id. Its presence also tells Stop whether a goroutine owns WorkingDir.
+	debugCancels sync.Map
 )
 
 type DebugRun struct {
@@ -113,6 +116,9 @@ func (l *debugAction) Prepare(_ context.Context, state *DebugActionState, reques
 func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action_kit_api.StartResult, error) {
 	log.Info().Msg("Debug action **start**")
 
+	ctx, cancel := context.WithCancel(context.Background())
+	debugCancels.Store(state.ExecutionId, cancel)
+
 	go func() {
 		// Recover so a panic while gathering debug information cannot crash the whole
 		// extension process (and take down other in-flight actions). Mark the run finished
@@ -124,6 +130,16 @@ func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action
 			}
 		}()
 		resultZip := RunSteadybitDebug(state.WorkingDir)
+
+		// If the action was stopped while gathering, the result archive (which lives
+		// inside WorkingDir) is no longer wanted, and Stop deliberately left WorkingDir
+		// for this goroutine to remove: Stop can't, because removing WorkingDir while the
+		// tar above was still running would make steadybit-debug os.Exit(1) and crash the
+		// whole extension. Now that the tar is done, it is safe to remove here.
+		if ctx.Err() != nil {
+			_ = os.RemoveAll(state.WorkingDir)
+			return
+		}
 		debugRuns.Store(state.ExecutionId, DebugRun{
 			Finished:  true,
 			ResultZip: resultZip,
@@ -173,12 +189,25 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 func (l *debugAction) Stop(_ context.Context, state *DebugActionState) (*action_kit_api.StopResult, error) {
 	log.Info().Msg("Debug action **stop**")
 
-	debugRuns.Delete(state.ExecutionId)
+	run, _ := debugRuns.LoadAndDelete(state.ExecutionId)
+	finished := run != nil && run.(DebugRun).Finished
 
-	err := os.RemoveAll(state.WorkingDir)
-	if err != nil {
-		log.Err(err).Msg("Failed to remove temp dir")
-		return nil, err
+	cancel, started := debugCancels.LoadAndDelete(state.ExecutionId)
+	if started {
+		// Signal the gather goroutine that its result is no longer wanted.
+		cancel.(context.CancelFunc)()
+	}
+
+	// WorkingDir holds the result archive. Remove it only when no gather goroutine could
+	// be tarring it — either none ran (e.g. prepared then rolled back), or it has already
+	// finished. While a gather is in flight, leave WorkingDir to the goroutine: removing
+	// it under an in-flight tar would make steadybit-debug os.Exit(1) and crash the whole
+	// extension.
+	if !started || finished {
+		if err := os.RemoveAll(state.WorkingDir); err != nil {
+			log.Err(err).Msg("Failed to remove temp dir")
+			return nil, err
+		}
 	}
 	return nil, nil
 }
