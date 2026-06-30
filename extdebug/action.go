@@ -28,15 +28,35 @@ var (
 	_ action_kit_sdk.ActionWithStatus[DebugActionState] = (*debugAction)(nil) // Optional, needed when the action needs a status method
 	_ action_kit_sdk.ActionWithStop[DebugActionState]   = (*debugAction)(nil) // Optional, needed when the action needs a stop method
 
+	// debugRuns maps an execution id to its *debugRun.
 	debugRuns sync.Map
-	// debugCancels holds the cancel func for each running gather goroutine, keyed by
-	// execution id. Its presence also tells Stop whether a goroutine owns WorkingDir.
-	debugCancels sync.Map
 )
 
-type DebugRun struct {
-	Finished  bool
-	ResultZip string
+// debugRun is the single source of truth for one debug execution, guarded by mu. Keeping
+// the lifecycle flags together under one lock lets Start, Status, Stop and the gather
+// goroutine make the "is the gather still tarring WorkingDir?" decision atomically — which
+// determines who may remove WorkingDir without racing steadybit-debug's tar (a failed tar
+// makes it os.Exit(1) and crashes the whole extension).
+type debugRun struct {
+	mu         sync.Mutex
+	workingDir string
+	started    bool // the gather goroutine has been launched
+	gatherDone bool // RunSteadybitDebug has returned, so no tar is running anymore
+	stopped    bool // Stop has been called
+	cleaned    bool // workingDir has been removed (removal is idempotent)
+	finished   bool // the result is ready for Status
+	resultZip  string
+}
+
+// removeWorkingDir deletes the working directory at most once. The caller must hold mu.
+func (r *debugRun) removeWorkingDir() {
+	if r.cleaned {
+		return
+	}
+	r.cleaned = true
+	if err := os.RemoveAll(r.workingDir); err != nil {
+		log.Err(err).Msg("Failed to remove temp dir")
+	}
 }
 
 type DebugActionState struct {
@@ -106,9 +126,7 @@ func (l *debugAction) Prepare(_ context.Context, state *DebugActionState, reques
 		return nil, err
 	}
 	state.WorkingDir = temp
-	debugRuns.Store(state.ExecutionId, DebugRun{
-		Finished: false,
-	})
+	debugRuns.Store(state.ExecutionId, &debugRun{workingDir: temp})
 
 	return nil, nil
 }
@@ -116,8 +134,15 @@ func (l *debugAction) Prepare(_ context.Context, state *DebugActionState, reques
 func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action_kit_api.StartResult, error) {
 	log.Info().Msg("Debug action **start**")
 
-	ctx, cancel := context.WithCancel(context.Background())
-	debugCancels.Store(state.ExecutionId, cancel)
+	value, ok := debugRuns.Load(state.ExecutionId)
+	if !ok {
+		return nil, fmt.Errorf("state not found for execution id %s", state.ExecutionId)
+	}
+	run := value.(*debugRun)
+
+	run.mu.Lock()
+	run.started = true
+	run.mu.Unlock()
 
 	go func() {
 		// Recover so a panic while gathering debug information cannot crash the whole
@@ -126,24 +151,31 @@ func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action
 		defer func() {
 			if r := recover(); r != nil {
 				log.Error().Msgf("Recovered from panic while gathering debug information: %v", r)
-				debugRuns.Store(state.ExecutionId, DebugRun{Finished: true})
+				run.mu.Lock()
+				run.gatherDone = true
+				run.finished = true
+				if run.stopped {
+					run.removeWorkingDir()
+				}
+				run.mu.Unlock()
 			}
 		}()
 		resultZip := RunSteadybitDebug(state.WorkingDir)
 
-		// If the action was stopped while gathering, the result archive (which lives
-		// inside WorkingDir) is no longer wanted, and Stop deliberately left WorkingDir
-		// for this goroutine to remove: Stop can't, because removing WorkingDir while the
-		// tar above was still running would make steadybit-debug os.Exit(1) and crash the
-		// whole extension. Now that the tar is done, it is safe to remove here.
-		if ctx.Err() != nil {
-			_ = os.RemoveAll(state.WorkingDir)
-			return
+		run.mu.Lock()
+		run.gatherDone = true
+		if run.stopped {
+			// Stopped while gathering: the result archive (which lives inside WorkingDir)
+			// is no longer wanted, and Stop left WorkingDir for this goroutine to remove —
+			// Stop couldn't, because removing WorkingDir while the tar above was still
+			// running would make steadybit-debug os.Exit(1) and crash the whole extension.
+			// The tar has returned, so removing it here is now safe.
+			run.removeWorkingDir()
+		} else {
+			run.finished = true
+			run.resultZip = resultZip
 		}
-		debugRuns.Store(state.ExecutionId, DebugRun{
-			Finished:  true,
-			ResultZip: resultZip,
-		})
+		run.mu.Unlock()
 	}()
 
 	return &action_kit_api.StartResult{}, nil
@@ -156,29 +188,32 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 	if !ok {
 		return nil, fmt.Errorf("state not found for execution id %s", state.ExecutionId)
 	}
-	if ok {
-		debugRun := value.(DebugRun)
-		if debugRun.Finished {
-			log.Info().Msg("Debug action **finished**")
-			artifacts := make([]action_kit_api.Artifact, 0)
-			_, err := os.Stat(debugRun.ResultZip)
+	run := value.(*debugRun)
+	run.mu.Lock()
+	finished := run.finished
+	resultZip := run.resultZip
+	run.mu.Unlock()
 
-			if err == nil { // file exists
-				content, err := extfile.File2Base64(debugRun.ResultZip)
-				if err != nil {
-					return nil, new(extension_kit.ToError("Failed to open content file", err))
-				}
-				artifacts = append(artifacts, action_kit_api.Artifact{
-					Label: "$(experimentKey)_$(executionId)_" + state.ExecutionId.String() + "_steadybit-debug.tar.gz",
-					Data:  content,
-				})
-				log.Info().Msg("Uploading debug result: " + debugRun.ResultZip)
+	if finished {
+		log.Info().Msg("Debug action **finished**")
+		artifacts := make([]action_kit_api.Artifact, 0)
+		_, err := os.Stat(resultZip)
+
+		if err == nil { // file exists
+			content, err := extfile.File2Base64(resultZip)
+			if err != nil {
+				return nil, new(extension_kit.ToError("Failed to open content file", err))
 			}
-			return &action_kit_api.StatusResult{
-				Completed: true,
-				Artifacts: new(artifacts),
-			}, nil
+			artifacts = append(artifacts, action_kit_api.Artifact{
+				Label: "$(experimentKey)_$(executionId)_" + state.ExecutionId.String() + "_steadybit-debug.tar.gz",
+				Data:  content,
+			})
+			log.Info().Msg("Uploading debug result: " + resultZip)
 		}
+		return &action_kit_api.StatusResult{
+			Completed: true,
+			Artifacts: new(artifacts),
+		}, nil
 	}
 	return &action_kit_api.StatusResult{
 		//indicate that the action is still running
@@ -189,25 +224,25 @@ func (l *debugAction) Status(_ context.Context, state *DebugActionState) (*actio
 func (l *debugAction) Stop(_ context.Context, state *DebugActionState) (*action_kit_api.StopResult, error) {
 	log.Info().Msg("Debug action **stop**")
 
-	run, _ := debugRuns.LoadAndDelete(state.ExecutionId)
-	finished := run != nil && run.(DebugRun).Finished
-
-	cancel, started := debugCancels.LoadAndDelete(state.ExecutionId)
-	if started {
-		// Signal the gather goroutine that its result is no longer wanted.
-		cancel.(context.CancelFunc)()
+	value, ok := debugRuns.LoadAndDelete(state.ExecutionId)
+	if !ok {
+		// Already stopped, or never prepared. Returning here also makes a duplicate Stop
+		// (e.g. a platform retry) a no-op, so it cannot remove WorkingDir while a still
+		// in-flight gather goroutine is tarring it.
+		return nil, nil
 	}
+	run := value.(*debugRun)
 
-	// WorkingDir holds the result archive. Remove it only when no gather goroutine could
-	// be tarring it — either none ran (e.g. prepared then rolled back), or it has already
-	// finished. While a gather is in flight, leave WorkingDir to the goroutine: removing
-	// it under an in-flight tar would make steadybit-debug os.Exit(1) and crash the whole
-	// extension.
-	if !started || finished {
-		if err := os.RemoveAll(state.WorkingDir); err != nil {
-			log.Err(err).Msg("Failed to remove temp dir")
-			return nil, err
-		}
+	run.mu.Lock()
+	defer run.mu.Unlock()
+	run.stopped = true
+	// Remove WorkingDir (which holds the result archive) only when no gather goroutine
+	// could still be tarring it: either none was started, or it has already finished.
+	// While a gather is in flight, leave WorkingDir to the goroutine, which removes it
+	// once RunSteadybitDebug returns and it observes stopped — removing it here under an
+	// in-flight tar would make steadybit-debug os.Exit(1) and crash the whole extension.
+	if !run.started || run.gatherDone {
+		run.removeWorkingDir()
 	}
 	return nil, nil
 }
