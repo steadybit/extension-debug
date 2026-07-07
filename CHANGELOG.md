@@ -1,9 +1,19 @@
 # Changelog
 
-## Unreleased
+## v1.0.24
 
+- build(deps): bump github.com/steadybit/action-kit/go/action_kit_sdk
+- build(deps): bump github.com/steadybit/event-kit/go/event_kit_api
+- build(deps): bump github.com/steadybit/extension-kit
+- chore(deps): update dependencies
+- chore: add Claude Code workflows (#92)
+- chore: normalize dependabot-auto-merge workflow to the standard version (#95)
+- chore: silence SonarQube finding on secrets: inherit in Claude workflows
+- fix: don't remove the debug working dir while a gather is in flight
+- fix: recover debug-gather goroutine panics and free run state on stop
 - fix: recover from panics in the background debug-gathering goroutine so a failure can no longer crash the whole extension, and remove the per-execution run state on stop to avoid an unbounded memory leak
 - fix: stop removing the debug working directory while it is still being gathered/archived, which could make steadybit-debug call `os.Exit(1)` and crash the whole extension when an experiment is stopped mid-run
+- refactor: guard debug run lifecycle with a single mutex-protected state
 
 ## v1.0.23
 
