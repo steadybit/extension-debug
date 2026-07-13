@@ -75,7 +75,7 @@ vulnerabilities:
     paths:
       - usr/bin/kubectl
   - id: CVE-2026-39822
-    statement: waiting for runc release
+    statement: waiting for kubectl release
     expired_at: 2027-01-01
     paths:
-      - usr/sbin/runc
+      - usr/bin/kubectl
