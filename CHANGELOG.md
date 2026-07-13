@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.25
+
+- chore(deps): bump go to 1.26.5 (#99)
+- refactor: register extension index via exthttp.RegisterRevisionedHandler (#100)
+
 ## v1.0.24
 
 - build(deps): bump github.com/steadybit/action-kit/go/action_kit_sdk
