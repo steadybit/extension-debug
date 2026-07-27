@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.27
+
+- chore(deps): update dependencies
+
 ## v1.0.26
 
 - ci: skip build on .trivyignore.yml-only changes [skip ci]
