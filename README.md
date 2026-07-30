@@ -7,7 +7,11 @@ Run [steadybit-debug](https://github.com/steadybit/steadybit-debug) as extension
 | Environment Variable                                      | Helm value                           | Meaning                                                                                                               | Required | Default                 |
 |-----------------------------------------------------------|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------|----------|-------------------------|
 
-The extension supports all environment variables provided by [steadybit/extension-kit](https://github.com/steadybit/extension-kit#environment-variables).
+Beyond the settings above, this extension supports the configuration common to all Steadybit
+extensions:
+
+- [extension-kit](https://github.com/steadybit/extension-kit#environment-variables) — HTTP and
+  health ports, TLS and mutual TLS, unix domain socket, logging, and pprof.
 
 
 ## Installation
