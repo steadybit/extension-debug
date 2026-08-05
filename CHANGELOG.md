@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.28
+
+- build(deps): bump github.com/steadybit/extension-kit
+- build(deps): bump github.com/steadybit/steadybit-debug
+- chore(chart): bump extensionlib to 1.5.4
+
 ## v1.0.27
 
 - chore(deps): update dependencies
