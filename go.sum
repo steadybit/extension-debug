@@ -143,8 +143,8 @@ github.com/steadybit/event-kit/go/event_kit_api v1.6.4 h1:7AAeOAyzqkJ5cHXMpGS9cw
 github.com/steadybit/event-kit/go/event_kit_api v1.6.4/go.mod h1:4LnV6bQUCzMfbb1iQzsD8k+uRWv1YK82LDszi7hkrjY=
 github.com/steadybit/extension-kit v1.11.2 h1:UFB82q0H/l4Q1RO1yiEgVuAO+XETLa/Yn168idkVFyI=
 github.com/steadybit/extension-kit v1.11.2/go.mod h1:jxbQy5zKhmnsSXtkyElOYJ5FEzsO5h+kAmN/vLql1fw=
-github.com/steadybit/steadybit-debug v1.4.0 h1:TTddw1x9F1WL2FN95HrQayLQZx6rGCENnsDpGGO//EY=
-github.com/steadybit/steadybit-debug v1.4.0/go.mod h1:fehNHq2njBmp+04CDpuuTTGgZGYjfj8RZPVq/yshgk0=
+github.com/steadybit/steadybit-debug v1.4.1 h1:ATsN/7k+gA++xI1/fbMc7/bf0KWazZ3op5MMTx+DrcQ=
+github.com/steadybit/steadybit-debug v1.4.1/go.mod h1:xGhOLmLjbfNM5V9kfidyJiUl3YRv+hw5pyUb4pRrYX8=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.5.2 h1:xuMeJ0Sdp5ZMRXx/aWO6RZxdr3beISkG5/G/aIRr3pY=
 github.com/stretchr/objx v0.5.2/go.mod h1:FRsXN1f5AsAjCGJKqEizvkpNtU+EGNCLh3NxZ/8L+MA=

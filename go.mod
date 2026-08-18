@@ -1,6 +1,6 @@
 module github.com/steadybit/extension-debug
 
-go 1.26.4
+go 1.26.0
 
 require (
 	github.com/KimMachineGun/automemlimit v0.7.5
@@ -13,7 +13,7 @@ require (
 	github.com/steadybit/discovery-kit/go/discovery_kit_api v1.7.2
 	github.com/steadybit/event-kit/go/event_kit_api v1.6.4
 	github.com/steadybit/extension-kit v1.11.2
-	github.com/steadybit/steadybit-debug v1.4.0
+	github.com/steadybit/steadybit-debug v1.4.1
 	github.com/stretchr/testify v1.11.1
 )
 
