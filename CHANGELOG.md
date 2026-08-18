@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.29
+
+- Bump go 1.26 floating (#104)
+- Bump go 1.26 floating (#105)
+- chore(deps): bump steadybit kits and drop Go patch pin (#103)
+- chore(deps): update dependencies
+
 ## v1.0.28
 
 - build(deps): bump github.com/steadybit/extension-kit
