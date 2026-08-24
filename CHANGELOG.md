@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.30
+
+- build(deps): bump github.com/steadybit/action-kit/go/action_kit_test
+- build(deps): bump github.com/stretchr/testify from 1.11.1 to 1.12.1
+- build(deps): bump golang from 1.26-alpine to 1.27-alpine
+
 ## v1.0.29
 
 - Bump go 1.26 floating (#104)
