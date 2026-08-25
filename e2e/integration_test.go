@@ -4,9 +4,12 @@
 package e2e
 
 import (
-	"github.com/steadybit/action-kit/go/action_kit_test/e2e"
-	"github.com/stretchr/testify/require"
+	"encoding/base64"
 	"testing"
+
+	"github.com/steadybit/action-kit/go/action_kit_test/e2e"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestWithMinikube(t *testing.T) {
@@ -36,11 +39,16 @@ func testRunDebug(t *testing.T, m *e2e.Minikube, e *e2e.Extension) {
 	exec, err := e.RunAction("com.steadybit.extension_debug.debug", nil, config, nil)
 	require.NoError(t, err)
 
-	// The action is TimeControlInternal, so nothing but the extension itself ends this run.
+	// TimeControlInternal: nothing but the extension itself ends this run.
 	require.NoError(t, exec.Wait())
 
-	// Wait returning already proves the run completed; this log line is the part that cannot be
-	// observed through the action API, because action-kit's test client drops the status result's
-	// artifacts. It is only written when an archive exists and got attached to that result.
-	e2e.AssertLogContains(t, m, e.Pod, "Uploading debug result:")
+	artifacts := exec.Artifacts()
+	require.Len(t, artifacts, 1, "the run must hand back exactly one debug archive")
+	assert.Contains(t, artifacts[0].Label, "steadybit-debug.tar.gz")
+
+	// The log line this replaces proved a path existed, not that the archive travelled intact.
+	archive, err := base64.StdEncoding.DecodeString(artifacts[0].Data)
+	require.NoError(t, err, "artifact data must be valid base64")
+	require.Greater(t, len(archive), 2, "artifact data must not be empty")
+	assert.Equal(t, []byte{0x1f, 0x8b}, archive[:2], "artifact data must be a gzip stream")
 }
