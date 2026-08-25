@@ -20,7 +20,12 @@ import (
 	"sync"
 )
 
-type debugAction struct{}
+type debugAction struct {
+	// gather collects the debug information and returns the path of the resulting archive. It is a
+	// field so tests can replace it: the real implementation needs a cluster to talk to and shells
+	// out to tar.
+	gather func(workingDir string) string
+}
 
 // Make sure action implements all required interfaces
 var (
@@ -68,7 +73,7 @@ type DebugActionConfig struct {
 }
 
 func NewDebugAction() action_kit_sdk.Action[DebugActionState] {
-	return &debugAction{}
+	return &debugAction{gather: RunSteadybitDebug}
 }
 
 func (l *debugAction) NewEmptyState() DebugActionState {
@@ -160,7 +165,7 @@ func (l *debugAction) Start(_ context.Context, state *DebugActionState) (*action
 				run.mu.Unlock()
 			}
 		}()
-		resultZip := RunSteadybitDebug(state.WorkingDir)
+		resultZip := l.gather(state.WorkingDir)
 
 		run.mu.Lock()
 		run.gatherDone = true
