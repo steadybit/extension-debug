@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.31
+
+- test(e2e): assert the debug archive instead of the log line
+- test(e2e): run the debug action through its whole cycle
+
 ## v1.0.30
 
 - build(deps): bump github.com/steadybit/action-kit/go/action_kit_test
