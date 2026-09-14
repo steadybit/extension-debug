@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.32
+
+- chore(deps): bump github.com/KimMachineGun/automemlimit from 0.7.5 to 1.0.0
+- chore: remove fixed CVEs from ignore list
+
 ## v1.0.31
 
 - test(e2e): assert the debug archive instead of the log line
