@@ -32,5 +32,10 @@ func ParseConfiguration() {
 }
 
 func ValidateConfiguration() {
-	// You may optionally validate the configuration here.
+	// envconfig's `required:"true"` only checks that the variable is *set*: an empty
+	// value satisfies it, so the extension would start with a blank configuration and
+	// fail much later against the target system. Reject blank values here instead.
+	if len(Config.RobotNames) == 0 {
+		log.Fatal().Msg("STEADYBIT_EXTENSION_ROBOT_NAMES must not be empty.")
+	}
 }
